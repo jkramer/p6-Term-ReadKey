@@ -3,7 +3,7 @@ module Term::ReadKey:ver<0.0.1> {
   use Term::termios;
   use NativeCall;
 
-  sub getchar() returns int32 is native { * }
+  sub getchar returns int32 is native { * }
 
   sub with-termios(Callable:D $fn, Bool:D :$echo = True --> Str) {
     my $original-flags := Term::termios.new(:fd($*IN.native-descriptor)).getattr;
@@ -66,3 +66,52 @@ module Term::ReadKey:ver<0.0.1> {
   }
 }
 
+=begin pod
+
+=head1 NAME
+
+Term::ReadKey
+
+=head1 DESCRIPTION
+
+Read single (unbuffered) keys from terminal.
+
+=head1 SYNOPSIS
+
+  use Term::ReadKey;
+
+  react {
+    whenever key-pressed(:!echo) {
+      given .fc {
+        when 'q' { done }
+        default { .uniname.say }
+      }
+    }
+  }
+
+=head1 FUNCTIONS
+
+=head2 read-key(Bool :$echo = True --> Str)
+
+Reads one unbuffered (unicode) character from STDIN and returns it as Str or
+Nil if nothing could be read. By default the typed character will be echoed to
+the terminal unless C<<:!echo>> is passed as argument.
+
+=head2 key-pressed(Bool :$echo = True --> Supply)
+
+Returns a supply that emits characters as soon as they're typed (see example in
+SYNOPSIS).  The named argument C<<:$echo>> can be used to enable/disable
+echoing of the character (on by default).
+
+=head1 AUTHOR
+
+Jonas Kramer <jkramer@mark17.net>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2018 Jonas Kramer.
+
+This library is free software; you can redistribute it and/or modify it under
+the Artistic License 2.0.
+
+=end pod
