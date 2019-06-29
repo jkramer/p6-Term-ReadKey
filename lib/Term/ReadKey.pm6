@@ -17,7 +17,7 @@ module Term::ReadKey:ver<0.0.1> {
 
     $original-flags.setattr(:NOW);
 
-    return $result;
+    return ($result ?? $result !! "");
   }
 
   sub read-character returns Str {
