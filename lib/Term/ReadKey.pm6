@@ -13,7 +13,7 @@ module Term::ReadKey:ver<0.0.1> {
     $flags.unset_lflags('ECHO') unless $echo;
     $flags.setattr(:NOW);
 
-    my $result = $fn();
+    my $result = $fn() // '';
 
     $original-flags.setattr(:NOW);
 
